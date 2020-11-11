@@ -1,2 +1,2 @@
 # laravel-ringover
-Laravel ringover SMS channel
+Laravel ringover SMS channel - Untested for now
