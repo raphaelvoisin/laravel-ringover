@@ -15,13 +15,13 @@ class RingoverChannel
     protected $client;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $defaultSenderPhone;
 
     public function __construct(
         Client $client,
-        string $defaultSenderPhone
+        ?string $defaultSenderPhone = null
     ) {
         $this->client = $client;
         $this->defaultSenderPhone = $defaultSenderPhone;
