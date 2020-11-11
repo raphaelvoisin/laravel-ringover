@@ -36,7 +36,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "NotificationChannels\\Ringover\\RingoverServiceProvider"
+                "RaphaelVoisin\\NotificationChannels\\Ringover\\RingoverServiceProvider"
             ]
         }
     }
