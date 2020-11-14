@@ -19,12 +19,19 @@ class RingoverChannel
      */
     private $defaultSenderPhone;
 
+    /**
+     * @var string|null
+     */
+    private $overriddenRecipientPhone;
+
     public function __construct(
         Client $client,
-        ?string $defaultSenderPhone = null
+        ?string $defaultSenderPhone = null,
+        ?string $overriddenRecipientPhone = null
     ) {
         $this->client = $client;
         $this->defaultSenderPhone = $defaultSenderPhone;
+        $this->overriddenRecipientPhone = $overriddenRecipientPhone;
     }
 
     /**
@@ -48,6 +55,10 @@ class RingoverChannel
 
         if (!\is_string($recipientPhone)) {
             throw new CouldNotSendNotification('No recipient phone found');
+        }
+
+        if (\is_string($this->overriddenRecipientPhone)) {
+            $recipientPhone = $this->overriddenRecipientPhone;
         }
 
         $senderPhone = $message->getSenderPhone() ?? $this->defaultSenderPhone;

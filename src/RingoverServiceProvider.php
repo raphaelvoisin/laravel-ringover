@@ -25,6 +25,10 @@ class RingoverServiceProvider extends ServiceProvider
         $ringoverChannel
             ->needs('$defaultSenderPhone')
             ->give(config('services.ringover.default_sender_phone'));
+
+        $ringoverChannel
+            ->needs('$overriddenRecipientPhone')
+            ->give(config('services.ringover.overridden_recipient_phone'));
     }
 
     /**
