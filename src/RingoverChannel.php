@@ -6,6 +6,7 @@ namespace RaphaelVoisin\NotificationChannels\Ringover;
 use Illuminate\Notifications\Notification;
 use RaphaelVoisin\NotificationChannels\Ringover\Exceptions\CouldNotSendNotification;
 use RaphaelVoisin\Ringover\Client;
+use RaphaelVoisin\Ringover\Exception\RingoverApiException;
 
 class RingoverChannel
 {
@@ -23,13 +24,20 @@ class RingoverChannel
      * @var string|null
      */
     private $overriddenRecipientPhone;
+    /**
+     * @var bool|bool
+     */
+    private $enabled;
 
     public function __construct(
         Client $client,
+        bool $enabled = true,
         ?string $defaultSenderPhone = null,
         ?string $overriddenRecipientPhone = null
-    ) {
+    )
+    {
         $this->client = $client;
+        $this->enabled = $enabled;
         $this->defaultSenderPhone = $defaultSenderPhone;
         $this->overriddenRecipientPhone = $overriddenRecipientPhone;
     }
@@ -67,6 +75,10 @@ class RingoverChannel
             throw new CouldNotSendNotification('No sender phone found');
         }
 
-        return $this->client->pushApi->sendMessage($senderPhone, $recipientPhone, $message->getMessage());
+        try {
+            return $this->client->pushApi->sendMessage($senderPhone, $recipientPhone, $message->getMessage());
+        } catch (RingoverApiException $e) {
+            throw new CouldNotSendNotification('Error from Ringover API: ' . $e->getMessage());
+        }
     }
 }
