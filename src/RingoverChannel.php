@@ -45,7 +45,7 @@ class RingoverChannel
     /**
      * @param $notifiable
      *
-     * @return \RaphaelVoisin\Ringover\Api\Push\Result\SendMessageResult
+     * @return \RaphaelVoisin\Ringover\Api\Push\Result\SendMessageResult|null
      */
     public function send($notifiable, Notification $notification)
     {
@@ -73,6 +73,10 @@ class RingoverChannel
 
         if (!\is_string($senderPhone)) {
             throw new CouldNotSendNotification('No sender phone found');
+        }
+
+        if (!$this->enabled) {
+            return null;
         }
 
         try {
