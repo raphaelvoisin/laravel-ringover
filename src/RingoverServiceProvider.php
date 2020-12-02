@@ -23,6 +23,10 @@ class RingoverServiceProvider extends ServiceProvider
             });
 
         $ringoverChannel
+            ->needs('$enabled')
+            ->give((bool)config('services.ringover.enabled', true));
+
+        $ringoverChannel
             ->needs('$defaultSenderPhone')
             ->give(config('services.ringover.default_sender_phone'));
 
