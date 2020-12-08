@@ -82,7 +82,7 @@ class RingoverChannel
         try {
             return $this->client->pushApi->sendMessage($senderPhone, $recipientPhone, $message->getMessage());
         } catch (RingoverApiException $e) {
-            throw new CouldNotSendNotification(sprintf('Error from Ringover API (%s): %s', get_class($e), $e->getMessage()));
+            throw new CouldNotSendNotification(sprintf('Error from Ringover API (%s): %s', (new \ReflectionClass($e))->getShortName(), $e->getMessage()));
         }
     }
 }
