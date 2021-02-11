@@ -22,6 +22,11 @@ class RingoverServiceProvider extends ServiceProvider
                 return new Client($apiKey);
             });
 
+        $ringoverChannel->needs(ApiKeyResolver::class)
+            ->give(function ($app) {
+                return $app->make(config('services.ringover.api_key_resolver'));
+            });
+
         $ringoverChannel
             ->needs('$enabled')
             ->give((bool)config('services.ringover.enabled', true));

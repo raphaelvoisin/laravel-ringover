@@ -5,6 +5,7 @@ namespace RaphaelVoisin\NotificationChannels\Ringover;
 
 use Illuminate\Notifications\Notification;
 use RaphaelVoisin\NotificationChannels\Ringover\Exceptions\CouldNotSendNotification;
+use RaphaelVoisin\Ringover\Api\Api;
 use RaphaelVoisin\Ringover\Client;
 use RaphaelVoisin\Ringover\Exception\RingoverApiException;
 
@@ -29,14 +30,19 @@ class RingoverChannel
      */
     private $enabled;
 
+    /** @var ApiKeyResolver $apiKeyResolver */
+    private $apiKeyResolver;
+
     public function __construct(
         Client $client,
+        ApiKeyResolver $apiKeyResolver,
         bool $enabled = true,
         ?string $defaultSenderPhone = null,
         ?string $overriddenRecipientPhone = null
     )
     {
         $this->client = $client;
+        $this->apiKeyResolver = $apiKeyResolver;
         $this->enabled = $enabled;
         $this->defaultSenderPhone = $defaultSenderPhone;
         $this->overriddenRecipientPhone = $overriddenRecipientPhone;
@@ -77,6 +83,10 @@ class RingoverChannel
 
         if (!$this->enabled) {
             return null;
+        }
+
+        if (($apiKey = $this->apiKeyResolver->resolve($senderPhone)) !== null) {
+            $this->client->setApiKey($apiKey);
         }
 
         try {
