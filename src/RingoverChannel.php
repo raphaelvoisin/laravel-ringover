@@ -89,7 +89,9 @@ class RingoverChannel
             return null;
         }
 
-        if ($this->apiKeyResolver instanceof ApiKeyResolver && ($apiKey = $this->apiKeyResolver->resolve($senderPhone)) !== null) {
+        if (
+            $this->apiKeyResolver instanceof ApiKeyResolver
+            && ($apiKey = $this->apiKeyResolver->resolve($senderPhone)) !== null) {
             $this->client->setApiKey($apiKey);
         }
 
