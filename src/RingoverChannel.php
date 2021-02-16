@@ -29,6 +29,9 @@ class RingoverChannel
      */
     private $enabled;
 
+    /** @var ApiKeyResolver|null $apiKeyResolver */
+    private $apiKeyResolver;
+
     public function __construct(
         Client $client,
         bool $enabled = true,
@@ -40,6 +43,13 @@ class RingoverChannel
         $this->enabled = $enabled;
         $this->defaultSenderPhone = $defaultSenderPhone;
         $this->overriddenRecipientPhone = $overriddenRecipientPhone;
+    }
+
+    public function setApiKeyResolver(ApiKeyResolver $apiKeyResolver): self
+    {
+        $this->apiKeyResolver = $apiKeyResolver;
+
+        return $this;
     }
 
     /**
@@ -77,6 +87,12 @@ class RingoverChannel
 
         if (!$this->enabled) {
             return null;
+        }
+
+        if (
+            $this->apiKeyResolver instanceof ApiKeyResolver
+            && ($apiKey = $this->apiKeyResolver->resolve($senderPhone)) !== null) {
+            $this->client->setApiKey($apiKey);
         }
 
         try {
