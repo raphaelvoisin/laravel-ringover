@@ -17,7 +17,7 @@ class RingoverServiceProvider extends ServiceProvider
 
         $ringoverChannel->needs(Client::class)
             ->give(function () {
-                $apiKey = config('services.ringover.api_key');
+                $apiKey = config('services.ringover.default_api_key');
 
                 return new Client($apiKey);
             });
